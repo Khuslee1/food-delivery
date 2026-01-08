@@ -44,7 +44,7 @@ export const Type = () => {
             <h1 className="w-316 text-[30px] text-white font-semibold">
               {ele}
             </h1>
-            <div className="flex flex-wrap h-180 w-316 gap-9">
+            <div className="flex flex-wrap w-316 gap-9">
               {orderInfo.map((foodele, index) => {
                 if (ele == foodele.categoryId.name)
                   return (
