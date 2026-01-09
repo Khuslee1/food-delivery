@@ -219,15 +219,6 @@ export const Cart = ({ ell, mapData, ele }: propsType) => {
                           className="w-[60%] h-29"
                           type="file"
                           accept="image/*"
-                          // onChange={(e) => {
-                          //   const file = e.target.files?.[0];
-                          //   if (!file) return;
-
-                          //   field.onChange(() => {
-                          //     URL.createObjectURL(file);
-                          //   });
-                          //   handleFileChange(e);
-                          // }}
                           onChange={handleUpload}
                           placeholder="Please choose photo"
                         />

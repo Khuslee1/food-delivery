@@ -269,16 +269,6 @@ export const CataAdd = ({ mapData, setAllstate, allState }: dataTypeMap) => {
                                       type="file"
                                       accept="image/*"
                                       value={undefined}
-                                      // onChange={(e) => {
-                                      //   const file = e.target.files?.[0];
-                                      //   if (!file) return;
-                                      //   field.onChange(
-                                      //     URL.createObjectURL(file)
-                                      //   );
-                                      //   if (file) {
-                                      //     setPreview(URL.createObjectURL(file));
-                                      //   }
-                                      // }}
                                       onChange={handleUpload}
                                       className="h-22.5 z-1 opacity-0"
                                     />
@@ -337,7 +327,7 @@ export const CataAdd = ({ mapData, setAllstate, allState }: dataTypeMap) => {
               </div>
             </div>
           );
-        if (allState)
+        if (allState && ele.food.length != 0)
           return (
             <div
               key={ele.id}
@@ -477,16 +467,6 @@ export const CataAdd = ({ mapData, setAllstate, allState }: dataTypeMap) => {
                                       type="file"
                                       accept="image/*"
                                       value={undefined}
-                                      // onChange={(e) => {
-                                      //   const file = e.target.files?.[0];
-                                      //   if (!file) return;
-                                      //   field.onChange(
-                                      //     URL.createObjectURL(file)
-                                      //   );
-                                      //   if (file) {
-                                      //     setPreview(URL.createObjectURL(file));
-                                      //   }
-                                      // }}
                                       onChange={handleUpload}
                                       className="h-22.5 z-1 opacity-0"
                                     />

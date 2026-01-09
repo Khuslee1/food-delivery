@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2, X } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import {
   Dialog,
@@ -24,7 +24,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { dataTypeMap } from "./CataAdd";
 import { foodArr } from "./CataAdd";
 import { api } from "@/lib/axios";
 const formSchema = z.object({
@@ -76,7 +75,7 @@ export const ToggleCata = ({
           return (
             <div className="flex items-center gap-2 bg-gray-200 p-1 rounded-2xl">
               <Button
-                key={i}
+                key={ele.id}
                 variant="outline"
                 className={`rounded-full ${ele.state ? "border-red-500" : ""}`}
                 onClick={() => {
@@ -93,16 +92,24 @@ export const ToggleCata = ({
                   {ele.food.length}
                 </p>
               </Button>
-              <Button
-                size={"icon"}
-                className="rounded-full border-red-500 w-8 h-8"
-                variant={"outline"}
-              >
-                <Trash2 className="text-red-500" />
-              </Button>
+              {ele.name != "Orphan" && (
+                <Button
+                  size={"icon"}
+                  className="rounded-full border-red-500 w-8 h-8"
+                  variant={"outline"}
+                  onClick={async () =>
+                    await api.delete("/categories/delete", {
+                      data: { name: ele.name },
+                    })
+                  }
+                >
+                  <Trash2 className="text-red-500" />
+                </Button>
+              )}
             </div>
           );
         })}
+
         <Dialog>
           <DialogTrigger asChild>
             <Button size="icon" className="bg-red-500 rounded-full">

@@ -27,16 +27,17 @@ export default function Home() {
     getDataFoods();
   }, []);
   const [categoriesWithFood, setCategoriesWithFood] = useState<foodArr[]>([]);
+  const [orphan, setOrphan] = useState<foodArr>();
 
   useEffect(() => {
     if (!foods || !Category) return;
 
-    const merged = Category.map((cat) => ({
+    const merged: foodArr[] = Category.map((cat) => ({
       name: cat.name,
       id: cat._id,
       state: false,
       food: foods
-        .filter((food) => food.categoryId._id === cat._id)
+        .filter((food) => food.categoryId?._id === cat._id)
         .map((food) => ({
           foodName: food.name,
           price: food.price,
@@ -46,7 +47,23 @@ export default function Home() {
         })),
     }));
 
+    const orphanFoods: foodArr = {
+      name: "Orphan",
+      id: "orphan",
+      state: false,
+      food: foods
+        .filter((food) => food.categoryId == null)
+        .map((food) => ({
+          foodName: food.name,
+          price: food.price,
+          foodId: food._id,
+          overview: food.ingredients,
+          img: food.image,
+        })),
+    };
+
     setCategoriesWithFood(merged);
+    // setOrphan(orphanFoods);
   }, [foods, categories]);
 
   return (
