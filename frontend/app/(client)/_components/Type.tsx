@@ -35,7 +35,7 @@ export const Type = () => {
 
   return (
     <>
-      {categories.map((ele, i) => {
+      {categories.map((ele) => {
         return (
           <div
             key={ele}

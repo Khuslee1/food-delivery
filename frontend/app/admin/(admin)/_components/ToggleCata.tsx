@@ -92,8 +92,22 @@ export const ToggleCata = ({
                   {ele.food.length}
                 </p>
               </Button>
-              {ele.name != "Orphan" && (
+              {ele.name != null && (
                 <Button
+                  size={"icon"}
+                  className="rounded-full border-red-500 w-8 h-8"
+                  variant={"outline"}
+                  onClick={async () =>
+                    await api.delete("/categories/delete", {
+                      data: { name: ele.name },
+                    })
+                  }
+                >
+                  <Trash2 className="text-red-500" />
+                </Button>
+              )}
+              {ele.name == null && (
+                     <Button
                   size={"icon"}
                   className="rounded-full border-red-500 w-8 h-8"
                   variant={"outline"}

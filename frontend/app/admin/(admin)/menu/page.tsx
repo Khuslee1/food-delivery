@@ -29,30 +29,23 @@ export default function Home() {
   const [categoriesWithFood, setCategoriesWithFood] = useState<foodArr[]>([]);
   const [orphan, setOrphan] = useState<foodArr>();
 
-  useEffect(() => {
-    if (!foods || !Category) return;
+useEffect(() => {
+  if (!foods || !Category) return;
 
-    const merged: foodArr[] = Category.map((cat) => ({
-      name: cat.name,
-      id: cat._id,
+  const merged: foodArr[] = Category.map((cat, index) => {
+    const categoryId = cat?._id ?? `unknown-${index}`;
+    const categoryName = cat?.name ?? "Uncategorized";
+
+    return {
+      name: categoryName,
+      id: categoryId,
       state: false,
       food: foods
-        .filter((food) => food.categoryId?._id === cat._id)
-        .map((food) => ({
-          foodName: food.name,
-          price: food.price,
-          foodId: food._id,
-          overview: food.ingredients,
-          img: food.image,
-        })),
-    }));
-
-    const orphanFoods: foodArr = {
-      name: "Orphan",
-      id: "orphan",
-      state: false,
-      food: foods
-        .filter((food) => food.categoryId == null)
+        .filter((food) =>
+          cat?._id
+            ? food?.categoryId?._id === cat._id
+            : food?.categoryId == null
+        )
         .map((food) => ({
           foodName: food.name,
           price: food.price,
@@ -61,10 +54,10 @@ export default function Home() {
           img: food.image,
         })),
     };
+  });
 
-    setCategoriesWithFood(merged);
-    // setOrphan(orphanFoods);
-  }, [foods, categories]);
+  setCategoriesWithFood(merged);
+}, [foods, Category]);
 
   return (
     <div className="w-full flex flex-col gap-10 bg-[#E4E4E7] px-7">
@@ -85,18 +78,3 @@ export default function Home() {
     </div>
   );
 }
-
-const food = { id: "123", name: "buuz", price: 1000, category: "123id" };
-const category = { id: "123id", name: "lunch" };
-
-const categories = [
-  { id: "123id", name: "lunch", count: 12 },
-  { id: "1d3id", name: "salad" },
-  { id: "123id", name: "lunch" },
-];
-
-const foods = [
-  { id: "123", name: "buuz", price: 1000, category: "123id" },
-  { id: "123", name: "buuz", price: 1000, category: "123id" },
-  { id: "123", name: "buuz", price: 1000, category: "123id" },
-];

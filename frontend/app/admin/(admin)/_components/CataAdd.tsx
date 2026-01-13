@@ -48,9 +48,9 @@ export type foodInfo = {
   img: string;
 };
 export type foodArr = {
-  name: string;
+  name: string | null;
   state: boolean;
-  id: string;
+  id: string | null;
   food: foodInfo[];
 };
 export type propsType = {
