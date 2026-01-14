@@ -31,30 +31,45 @@ export default function Home() {
 
 useEffect(() => {
   if (!foods || !Category) return;
+const merged = Category.map((cat) => ({
+  id: cat._id,
+  name: cat.name,
+  state: false,
+  food: foods
+    .filter(
+      (food) => food.categoryId && food.categoryId._id === cat._id
+    )
+    .map((food) => ({
+      foodName: food.name,
+      price: food.price,
+      foodId: food._id,
+      overview: food.ingredients,
+      img: food.image,
+    })),
+}));
 
-  const merged: foodArr[] = Category.map((cat, index) => {
-    const categoryId = cat?._id ?? `unknown-${index}`;
-    const categoryName = cat?.name ?? "Uncategorized";
+const hasNullCategoryFoods = foods.some(
+  (food) => !food.categoryId
+);
 
-    return {
-      name: categoryName,
-      id: categoryId,
-      state: false,
-      food: foods
-        .filter((food) =>
-          cat?._id
-            ? food?.categoryId?._id === cat._id
-            : food?.categoryId == null
-        )
-        .map((food) => ({
-          foodName: food.name,
-          price: food.price,
-          foodId: food._id,
-          overview: food.ingredients,
-          img: food.image,
-        })),
-    };
+if (hasNullCategoryFoods) {
+  const uncategorizedFoods = foods
+    .filter((food) => !food.categoryId)
+    .map((food) => ({
+      foodName: food.name,
+      price: food.price,
+      foodId: food._id,
+      overview: food.ingredients,
+      img: food.image,
+    }));
+
+  merged.push({
+    id: "uncategorized",
+    name: "Uncategorized",
+    state: false,
+    food: uncategorizedFoods,
   });
+}
 
   setCategoriesWithFood(merged);
 }, [foods, Category]);

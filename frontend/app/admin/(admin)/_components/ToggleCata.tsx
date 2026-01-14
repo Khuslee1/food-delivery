@@ -92,7 +92,7 @@ export const ToggleCata = ({
                   {ele.food.length}
                 </p>
               </Button>
-              {ele.name != null && (
+              {ele.name != "Uncategorized" && (
                 <Button
                   size={"icon"}
                   className="rounded-full border-red-500 w-8 h-8"
