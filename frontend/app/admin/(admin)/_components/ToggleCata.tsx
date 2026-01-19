@@ -73,7 +73,10 @@ export const ToggleCata = ({
         </Button>
         {mapData.map((ele, i) => {
           return (
-            <div className="flex items-center gap-2 bg-gray-200 p-1 rounded-2xl">
+            <div
+              key={ele.id}
+              className="flex items-center gap-2 bg-gray-200 p-1 rounded-2xl"
+            >
               <Button
                 key={ele.id}
                 variant="outline"
@@ -107,7 +110,7 @@ export const ToggleCata = ({
                 </Button>
               )}
               {ele.name == null && (
-                     <Button
+                <Button
                   size={"icon"}
                   className="rounded-full border-red-500 w-8 h-8"
                   variant={"outline"}

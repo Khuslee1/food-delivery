@@ -298,9 +298,13 @@ export const CataAdd = ({ mapData, setAllstate, allState }: dataTypeMap) => {
                                         <div className="h-8 w-8 flex justify-center items-center bg-white rounded-full">
                                           <Image className="h-4 w-4" />
                                         </div>
-                                        <p>
-                                          Choose a file or drag & drop it here
-                                        </p>
+                                        {uploading ? (
+                                          <p>Uploading</p>
+                                        ) : (
+                                          <p>
+                                            Choose a file or drag & drop it here
+                                          </p>
+                                        )}
                                       </>
                                     )}
                                   </div>
@@ -496,9 +500,13 @@ export const CataAdd = ({ mapData, setAllstate, allState }: dataTypeMap) => {
                                         <div className="h-8 w-8 flex justify-center items-center bg-white rounded-full">
                                           <Image className="h-4 w-4" />
                                         </div>
-                                        <p>
-                                          Choose a file or drag & drop it here
-                                        </p>
+                                        {uploading ? (
+                                          <p>Uploading</p>
+                                        ) : (
+                                          <p>
+                                            Choose a file or drag & drop it here
+                                          </p>
+                                        )}
                                       </>
                                     )}
                                   </div>

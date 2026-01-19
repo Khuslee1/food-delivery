@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
-import { Pen, Trash } from "lucide-react";
+import { Image, Pen, Trash } from "lucide-react";
 import { useState } from "react";
 import { X } from "lucide-react";
 import {
@@ -38,7 +38,7 @@ import { api } from "@/lib/axios";
 
 const formSchema = z.object({
   dishName: z.string(),
-  dishCata: z.string(),
+  dishCata: z.any(),
   ingre: z.string(),
   price: z.number(),
   image: z.any(),
@@ -85,7 +85,7 @@ export const Cart = ({ ell, mapData, ele }: propsType) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       dishName: ell.foodName,
-      dishCata: ele.name,
+      dishCata: ele.id,
       ingre: ell.overview,
       price: ell.price,
       image: ell.img,
@@ -161,6 +161,7 @@ export const Cart = ({ ell, mapData, ele }: propsType) => {
                         <Select
                           value={field.value}
                           onValueChange={field.onChange}
+                          defaultValue={`${ele.id}`}
                         >
                           <SelectTrigger className="w-[60%]">
                             <SelectValue {...field} />
@@ -216,21 +217,21 @@ export const Cart = ({ ell, mapData, ele }: propsType) => {
                       <FormLabel> Image</FormLabel>
                       <FormControl>
                         <Input
-                          className="w-[60%] h-29"
+                          className="w-[60%] h-29 opacity-0 "
                           type="file"
                           accept="image/*"
                           onChange={handleUpload}
                           placeholder="Please choose photo"
                         />
                       </FormControl>
-                      {preview && (
+
+                      {preview ? (
                         <div className="absolute w-[55%] h-29 right-5">
                           <img
                             src={preview}
                             alt="preview"
                             className="w-full h-full object-cover rounded-md "
                           />
-
                           <Button
                             size="icon"
                             variant={"outline"}
@@ -241,6 +242,18 @@ export const Cart = ({ ell, mapData, ele }: propsType) => {
                           >
                             <X />
                           </Button>
+                        </div>
+                      ) : (
+                        <div className="absolute bg-white flex flex-col items-center justify-center right-6 w-69.25 h-29 border border-grey-300 rounded-xl -z-1">
+                          {" "}
+                          <div className="h-8 w-8 flex justify-center items-center bg-white rounded-full">
+                            <Image className="h-4 w-4" />
+                          </div>
+                          {uploading ? (
+                            <p>Uploading</p>
+                          ) : (
+                            <p>Choose a file or drag & drop it here</p>
+                          )}
                         </div>
                       )}
                       <FormMessage />
