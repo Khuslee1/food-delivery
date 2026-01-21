@@ -84,8 +84,8 @@ export const ToggleCata = ({
                 onClick={() => {
                   setMap((prev) =>
                     prev.map((item, idx) =>
-                      idx === i ? { ...item, state: !item.state } : item
-                    )
+                      idx === i ? { ...item, state: !item.state } : item,
+                    ),
                   );
                   setAllstate(false);
                 }}
@@ -109,7 +109,7 @@ export const ToggleCata = ({
                   <Trash2 className="text-red-500" />
                 </Button>
               )}
-              {ele.name == null && (
+              {/* {ele.name == null && (
                 <Button
                   size={"icon"}
                   className="rounded-full border-red-500 w-8 h-8"
@@ -122,7 +122,7 @@ export const ToggleCata = ({
                 >
                   <Trash2 className="text-red-500" />
                 </Button>
-              )}
+              )} */}
             </div>
           );
         })}

@@ -1,6 +1,7 @@
 "use client";
 import { Footer } from "./_components/Footer";
 import { HeaderMain } from "./_components/HeaderMain";
+import { AuthProvider } from "./context/AuthProvider";
 import { CartProvider } from "./context/cart-context";
 
 export default function RootLayout({
@@ -10,11 +11,13 @@ export default function RootLayout({
 }>) {
   return (
     <div>
-      <CartProvider>
-        <HeaderMain />
-        {children}
-        <Footer />
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <HeaderMain />
+          {children}
+          <Footer />
+        </CartProvider>
+      </AuthProvider>
     </div>
   );
 }

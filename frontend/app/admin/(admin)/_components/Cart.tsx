@@ -58,7 +58,7 @@ export const Cart = ({ ell, mapData, ele }: propsType) => {
         {
           method: "POST",
           body: file,
-        }
+        },
       );
 
       if (!response.ok) {
@@ -236,7 +236,7 @@ export const Cart = ({ ell, mapData, ele }: propsType) => {
                             size="icon"
                             variant={"outline"}
                             onClick={() => {
-                              handleRemove(), field.onChange(null);
+                              (handleRemove(), field.onChange(null));
                             }}
                             className="absolute top-1 right-2 rounded-full "
                           >

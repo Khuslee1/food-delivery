@@ -1,12 +1,11 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { Food, useCart } from "../context/cart-context";
+import { Food } from "../context/cart-context";
 import { FoodCart } from "./FoodCart";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/axios";
 import { foodType } from "./CartInfo";
-import { category } from "./Footer";
 
 type Params = {
   ele: string;
@@ -36,7 +35,7 @@ export const TypeCata = () => {
         foods.map((food) => ({
           ...food,
           quantity: 1,
-        }))
+        })),
       );
     }
   }, [foods]);

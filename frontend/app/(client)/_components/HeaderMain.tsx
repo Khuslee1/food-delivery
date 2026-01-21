@@ -22,19 +22,17 @@ import {
 } from "@/components/ui/drawer";
 import { CartInfo } from "./CartInfo";
 
-import { type DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useCart } from "../context/cart-context";
-type Checked = DropdownMenuCheckboxItemProps["checked"];
+import { useAuth } from "../context/AuthProvider";
 
 export const HeaderMain = () => {
-  const [log, setLog] = useState<boolean>(false);
+  const { user } = useAuth();
+  // const [log, setLog] = useState<boolean>(false);
   const router = useRouter();
   return (
     <div className="w-screen h-17 bg-[#18181B] flex px-22 items-center justify-between fixed top-0 right-0 left-0 z-2">
@@ -48,7 +46,7 @@ export const HeaderMain = () => {
         </div>
       </div>
       <div className="flex gap-3">
-        {!log ? (
+        {user ? (
           <>
             <Dialog>
               <DialogTrigger asChild>
@@ -143,9 +141,9 @@ export const HeaderMain = () => {
                   <Button
                     variant="outline"
                     className=" bg-[#F4F4F5] w-20 rounded-full"
-                    onClick={() => {
-                      setLog(!log);
-                    }}
+                    // onClick={() => {
+                    //   setLog(!log);
+                    // }}
                   >
                     Sign out
                   </Button>
@@ -160,7 +158,7 @@ export const HeaderMain = () => {
               className="bg-white rounded-full"
               onClick={() => {
                 router.push("./Signup");
-                setLog(!log);
+                // setLog(!log);
               }}
             >
               Sign up
@@ -170,7 +168,7 @@ export const HeaderMain = () => {
               className="bg-red-500 border-0 text-white rounded-full"
               onClick={() => {
                 router.push("./Login");
-                setLog(!log);
+                // setLog(!log);
               }}
             >
               Log in

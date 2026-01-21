@@ -1,10 +1,8 @@
 "use client";
 import { Instagram, LucideFacebook } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { Food, useCart } from "../context/cart-context";
+import { useEffect, useState } from "react";
 import { api } from "@/lib/axios";
-import { foodType } from "./CartInfo";
 export type category = { name: string; _id: string };
 
 export const Footer = () => {
