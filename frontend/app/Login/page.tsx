@@ -5,17 +5,19 @@ import { CreateNew } from "../_components/auth/CreateNew";
 import { Login } from "../_components/auth/Login";
 import { Forgot } from "../_components/auth/Forgot";
 import { Verify } from "../_components/auth/Verify";
+import { useAuth } from "../(client)/context/AuthProvider";
 
 export type StepContextType = {
   setStep: Dispatch<SetStateAction<number>>;
 };
 
 export const StepContext = createContext<StepContextType>(
-  {} as StepContextType
+  {} as StepContextType,
 );
 
 export default function Home() {
   const [step, setStep] = useState<number>(1);
+
   return (
     <div className="w-screen h-screen flex gap-10 p-10 pl-20 items-center justify-between">
       <StepContext.Provider value={{ setStep }}>

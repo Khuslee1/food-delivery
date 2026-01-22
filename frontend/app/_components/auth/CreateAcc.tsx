@@ -18,6 +18,7 @@ import { Header } from "./Header";
 import { useContext } from "react";
 import { StepContext } from "@/app/Signup/page";
 import { Jumper } from "./Jumper";
+import { useAuth } from "@/app/(client)/context/AuthProvider";
 
 const formSchema = z.object({
   Email: z
@@ -25,6 +26,7 @@ const formSchema = z.object({
     .email({ message: "Invalid email. Use a format like example@email.com." }),
 });
 export const CreateAcc = () => {
+  const { register } = useAuth();
   const { setStep } = useContext(StepContext);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

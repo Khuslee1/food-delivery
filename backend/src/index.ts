@@ -1,21 +1,21 @@
-import  express from 'express'
-import { connectToDatabase } from './database';
-import { FoodRouter } from './routes/food.routes';
-import { CategoryRouter } from './routes/category.routes';
-import cors from 'cors'
-
+import express from "express";
+import { connectToDatabase } from "./database";
+import { FoodRouter } from "./routes/food.routes";
+import { CategoryRouter } from "./routes/category.routes";
+import cors from "cors";
+import { AuthRouter } from "./routes";
 
 await connectToDatabase();
 
 const app = express();
 
-const port = 4000
+const port = 4000;
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 // let arr : string[] = []
 
 // app.get('/', (req, res) => {
-//   res.send(arr) 
+//   res.send(arr)
 // })
 
 // app.post('/', (req, res) => {
@@ -30,10 +30,10 @@ app.use(cors())
 //     res.send("success")
 // })
 
-app.use('/foods', FoodRouter) ;
-app.use('/categories', CategoryRouter) ;
+app.use("/foods", FoodRouter);
+app.use("/categories", CategoryRouter);
+app.use("/auth", AuthRouter);
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
-
+  console.log(`Example app listening on port ${port}`);
+});

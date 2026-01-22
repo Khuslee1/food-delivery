@@ -19,11 +19,10 @@ import { useContext } from "react";
 import { StepContext } from "@/app/Login/page";
 import { Jumper } from "./Jumper";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/(client)/context/AuthProvider";
 
 const formSchema = z.object({
-  Email: z
-    .string()
-    .email({ message: "Invalid email. Use a format like example@email.com." }),
+  Username: z.string(),
   Password: z
     .string()
     .min(6, "Password must be at least 6 characters.")
@@ -34,18 +33,20 @@ const formSchema = z.object({
 });
 export const Login = () => {
   const { setStep } = useContext(StepContext);
+  const { login } = useAuth();
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      Email: "",
+      Username: "",
       Password: "",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-    router.push("./");
+    login(values.Username, values.Password);
+    // router.push("./");
   }
   return (
     <div className="w-104 flex flex-col gap-6">
@@ -63,11 +64,11 @@ export const Login = () => {
           <div className="flex flex-col gap-4">
             <FormField
               control={form.control}
-              name="Email"
+              name="Username"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="Enter your email address" {...field} />
+                    <Input placeholder="Enter your username" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

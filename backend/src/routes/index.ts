@@ -1,2 +1,3 @@
-export * from "./category.routes"
-export * from "./food.routes"
+export * from "./category.routes";
+export * from "./food.routes";
+export * from "./auth.routes";
