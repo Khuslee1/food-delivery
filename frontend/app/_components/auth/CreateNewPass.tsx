@@ -21,6 +21,7 @@ import { useContext, useState } from "react";
 import { StepContext } from "@/app/Signup/page";
 import { Jumper } from "./Jumper";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/(client)/context/AuthProvider";
 
 const formSchema = z
   .object({
@@ -38,8 +39,9 @@ const formSchema = z
     path: ["ConfirmPassword"],
   });
 export const CreateNewPass = () => {
-  const { setStep } = useContext(StepContext);
+  const { setStep, data } = useContext(StepContext);
   const [see, setSee] = useState<boolean>(false);
+  const { register } = useAuth();
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,8 +52,7 @@ export const CreateNewPass = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    router.push("./");
+    register(data.email, values.ConfirmPassword);
   }
   return (
     <div className="w-104 flex flex-col gap-6">

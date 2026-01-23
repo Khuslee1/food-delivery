@@ -3,9 +3,9 @@ import { UserModel } from "../../database/schema";
 import jwt from "jsonwebtoken";
 
 export const login: RequestHandler = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  const user = await UserModel.findOne({ username });
+  const user = await UserModel.findOne({ email });
 
   if (!user) return res.status(404).json({ message: "User not found" });
 

@@ -5,7 +5,6 @@ import { CreateNew } from "../_components/auth/CreateNew";
 import { Login } from "../_components/auth/Login";
 import { Forgot } from "../_components/auth/Forgot";
 import { Verify } from "../_components/auth/Verify";
-import { useAuth } from "../(client)/context/AuthProvider";
 
 export type StepContextType = {
   setStep: Dispatch<SetStateAction<number>>;

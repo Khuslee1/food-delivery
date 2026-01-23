@@ -18,7 +18,6 @@ import { Header } from "./Header";
 import { useContext } from "react";
 import { StepContext } from "@/app/Signup/page";
 import { Jumper } from "./Jumper";
-import { useAuth } from "@/app/(client)/context/AuthProvider";
 
 const formSchema = z.object({
   Email: z
@@ -26,8 +25,7 @@ const formSchema = z.object({
     .email({ message: "Invalid email. Use a format like example@email.com." }),
 });
 export const CreateAcc = () => {
-  const { register } = useAuth();
-  const { setStep } = useContext(StepContext);
+  const { setStep, setData } = useContext(StepContext);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,8 +34,11 @@ export const CreateAcc = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     setStep(2);
+    setData((prev) => ({
+      ...prev,
+      email: values.Email,
+    }));
   }
   return (
     <div className="w-104 flex flex-col gap-6">

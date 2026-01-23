@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/(client)/context/AuthProvider";
 
 const formSchema = z.object({
-  Username: z.string(),
+  Email: z.string(),
   Password: z
     .string()
     .min(6, "Password must be at least 6 characters.")
@@ -38,15 +38,14 @@ export const Login = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      Username: "",
+      Email: "",
       Password: "",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-    login(values.Username, values.Password);
-    // router.push("./");
+    login(values.Email, values.Password);
   }
   return (
     <div className="w-104 flex flex-col gap-6">
@@ -64,7 +63,7 @@ export const Login = () => {
           <div className="flex flex-col gap-4">
             <FormField
               control={form.control}
-              name="Username"
+              name="Email"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
