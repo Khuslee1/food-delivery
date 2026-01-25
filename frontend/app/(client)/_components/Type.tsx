@@ -12,7 +12,11 @@ export const Type = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const { data } = await api.get("/foods");
+      const { data } = await api.get("/foods", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
       setFoods(data);
     };
     getData();
@@ -24,20 +28,20 @@ export const Type = () => {
         foods.map((food) => ({
           ...food,
           quantity: 1,
-        }))
+        })),
       );
     }
   }, [foods]);
 
-const categories: string[] = useMemo(() => {
-  return Array.from(
-    new Set(
-      orderInfo.map((item) =>
-        item.categoryId ? item.categoryId.name : "Uncategorized"
-      )
-    )
-  );
-}, [orderInfo]);
+  const categories: string[] = useMemo(() => {
+    return Array.from(
+      new Set(
+        orderInfo.map((item) =>
+          item.categoryId ? item.categoryId.name : "Uncategorized",
+        ),
+      ),
+    );
+  }, [orderInfo]);
 
   return (
     <>
@@ -52,10 +56,10 @@ const categories: string[] = useMemo(() => {
             </h1>
             <div className="flex flex-wrap w-316 gap-9">
               {orderInfo.map((foodele, index) => {
-       if (
-  (ele === "Uncategorized" && !foodele.categoryId) ||
-  ele === foodele.categoryId?.name
-)
+                if (
+                  (ele === "Uncategorized" && !foodele.categoryId) ||
+                  ele === foodele.categoryId?.name
+                )
                   return (
                     <FoodCart
                       key={index}

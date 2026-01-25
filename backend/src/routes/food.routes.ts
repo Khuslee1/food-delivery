@@ -4,10 +4,11 @@ import { createFood } from "../controllers/food/create-foods";
 import { deleteFood } from "../controllers/food/delete-foods";
 import { getFoodsByCategory } from "../controllers/food/get-foods-by-category";
 import { updateFood } from "../controllers/food/update-foods";
+import { authMiddleware } from "../middlewares";
 
 const FoodRouter = Router();
 
-FoodRouter.get("/", getFoods)
+FoodRouter.get("/", authMiddleware, getFoods)
   .post("/create", createFood)
   .delete("/", deleteFood)
   .get("/category/:id", getFoodsByCategory)

@@ -31,7 +31,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../context/AuthProvider";
 
 export const HeaderMain = () => {
-  const { user } = useAuth();
+  const { user, signout } = useAuth();
   // const [log, setLog] = useState<boolean>(false);
   const router = useRouter();
   return (
@@ -141,9 +141,7 @@ export const HeaderMain = () => {
                   <Button
                     variant="outline"
                     className=" bg-[#F4F4F5] w-20 rounded-full"
-                    // onClick={() => {
-                    //   setLog(!log);
-                    // }}
+                    onClick={() => signout()}
                   >
                     Sign out
                   </Button>
