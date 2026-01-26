@@ -7,6 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { HistoryCard } from "./HistoryCard";
 import { Food, useCart } from "../context/cart-context";
+import { api } from "@/lib/axios";
+import { useAuth } from "../context/AuthProvider";
 
 export type foodType = Food & {
   quantity: number;
@@ -17,6 +19,17 @@ export type orderType = {
 
 export const CartInfo = () => {
   const { getTotalPrice, cartItems } = useCart();
+  const { user } = useAuth();
+  const postOrder = async () => {
+    await api.post("/order", {
+      userId: user?._id,
+      orderItems: cartItems.map((item: foodType) => ({
+        foodId: item._id,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+    });
+  };
 
   return (
     <div className="flex w-full flex-col gap-6">
@@ -104,7 +117,10 @@ export const CartInfo = () => {
                       : "-"}
                   </span>
                 </p>
-                <Button className="w-full h-11 bg-red-500 text-white rounded-full mt-4">
+                <Button
+                  className="w-full h-11 bg-red-500 text-white rounded-full mt-4"
+                  onClick={() => postOrder()}
+                >
                   Checkout
                 </Button>
               </div>

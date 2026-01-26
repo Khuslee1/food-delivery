@@ -23,9 +23,14 @@ export const TypeCata = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const { data } = await api.get("/foods");
+      const { data } = await api.get("/foods", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
       setFoods(data);
     };
+
     getData();
   }, []);
 
