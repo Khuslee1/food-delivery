@@ -15,12 +15,14 @@ type AuthContextType = {
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
   signout: () => void;
+  getMe: () => Promise<void>;
 };
 
 type User = {
   _id: string;
   email: string;
   role: string;
+  address: string;
 };
 type LoginRes = {
   user: User;
@@ -56,18 +58,20 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     router.push("/Login");
   };
 
-  useEffect(() => {
+  const getMe = async () => {
     const accessToken = localStorage.getItem("accessToken");
+    const { data } = await api.get<{ user: User }>("/auth/me", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
+    setUser(data.user);
+  };
+  useEffect(() => {
     const fetchMe = async () => {
       try {
-        const { data } = await api.get<{ user: User }>("/auth/me", {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        setUser(data.user);
+        getMe();
       } catch {
         localStorage.removeItem("accessToken");
       }
@@ -75,14 +79,13 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
     fetchMe();
   }, []);
-
   const signout = () => {
     localStorage.removeItem("accessToken");
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, signout }}>
+    <AuthContext.Provider value={{ user, login, register, signout, getMe }}>
       {children}
     </AuthContext.Provider>
   );

@@ -9,6 +9,7 @@ import { HistoryCard } from "./HistoryCard";
 import { Food, useCart } from "../context/cart-context";
 import { api } from "@/lib/axios";
 import { useAuth } from "../context/AuthProvider";
+import { useEffect, useState } from "react";
 
 export type foodType = Food & {
   quantity: number;
@@ -18,18 +19,25 @@ export type orderType = {
 };
 
 export const CartInfo = () => {
-  const { getTotalPrice, cartItems } = useCart();
-  const { user } = useAuth();
+  const { getTotalPrice, cartItems, deleteAll } = useCart();
+  const { user, getMe } = useAuth();
+  const [address, setAddress] = useState<string | undefined>(user?.address);
+  const updateAddress = async (add: string | undefined) => {
+    await api.put("/auth/address", { address: add });
+  };
   const postOrder = async () => {
     await api.post("/order", {
-      userId: user?._id,
       orderItems: cartItems.map((item: foodType) => ({
         foodId: item._id,
         quantity: item.quantity,
         price: item.price,
       })),
     });
+    deleteAll();
   };
+  // useEffect(() => {
+  //   getMe();
+  // }, [address]);
 
   return (
     <div className="flex w-full flex-col gap-6">
@@ -79,8 +87,12 @@ export const CartInfo = () => {
                       Delivary location
                     </h1>
                     <Textarea
+                      defaultValue={user?.address}
                       placeholder="Please share your complete address"
                       className="mt-2 h-20"
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                        setAddress(e.target.value)
+                      }
                     />
                   </div>
                 </div>
@@ -119,7 +131,10 @@ export const CartInfo = () => {
                 </p>
                 <Button
                   className="w-full h-11 bg-red-500 text-white rounded-full mt-4"
-                  onClick={() => postOrder()}
+                  onClick={() => {
+                    updateAddress(address);
+                    postOrder();
+                  }}
                 >
                   Checkout
                 </Button>

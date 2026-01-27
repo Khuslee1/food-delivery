@@ -1,5 +1,11 @@
 "use client";
-import { ReactNode, useContext, useState } from "react";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useContext,
+  useState,
+} from "react";
 import { foodType } from "../_components/CartInfo";
 import { createContext } from "react";
 
@@ -10,6 +16,7 @@ interface CartContextType {
   updateQuantity: (id: string, quantity: number) => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
+  deleteAll: () => void;
 }
 export type Food = {
   _id: string;
@@ -30,7 +37,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         return prev.map((ele) =>
           ele._id === item._id
             ? { ...ele, quantity: ele.quantity + item.quantity }
-            : ele
+            : ele,
         );
       }
       return [...prev, item];
@@ -41,7 +48,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
   const updateQuantity = (id: string, quantity: number) => {
     setCartitems((prev) =>
-      prev.map((ele) => (ele._id == id ? { ...ele, quantity: quantity } : ele))
+      prev.map((ele) => (ele._id == id ? { ...ele, quantity: quantity } : ele)),
     );
   };
   const getTotalItems = () => {
@@ -49,6 +56,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
   const getTotalPrice = () => {
     return cartItems.reduce((sum, ele) => sum + ele.price * ele.quantity, 0);
+  };
+  const deleteAll = () => {
+    return setCartitems([]);
   };
   return (
     <CartContext.Provider
@@ -59,6 +69,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         updateQuantity,
         getTotalItems,
         getTotalPrice,
+        deleteAll,
       }}
     >
       {children}

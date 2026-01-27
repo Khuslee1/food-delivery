@@ -7,9 +7,8 @@ export const HistoryCard = () => {
       <CardHeader>
         <CardTitle className="text-[20px]">Order history</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-2">
-        <HistoryFood hurgelt={false} />
-        <HistoryFood hurgelt={true} />
+      <CardContent className="flex flex-col gap-2 max-h-100 overflow-scroll">
+        <HistoryFood />
       </CardContent>
     </Card>
   );

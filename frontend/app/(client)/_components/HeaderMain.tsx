@@ -29,12 +29,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../context/AuthProvider";
+import { api } from "@/lib/axios";
+import { useState } from "react";
 
 export const HeaderMain = () => {
-  // const postAddress = () => {
-  //   api.post("")
-  // }
-  const { user, signout } = useAuth();
+  const { user, signout, getMe } = useAuth();
+  const [address, setAddres] = useState<string>("");
+  const updateAddress = async (add: string | undefined) => {
+    await api.put("/auth/address", { address: add });
+    getMe();
+  };
+
   const router = useRouter();
   return (
     <div className="w-screen h-17 bg-[#18181B] flex px-22 items-center justify-between fixed top-0 right-0 left-0 z-2">
@@ -81,9 +86,12 @@ export const HeaderMain = () => {
                 <div className="grid gap-4">
                   <div className="grid gap-3">
                     <Textarea
+                      defaultValue={user?.address}
                       placeholder="Please share your complete address"
                       className="h-20"
-                      // onClick={()=>}
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                        setAddres(e.target.value);
+                      }}
                     />
                   </div>
                 </div>
@@ -91,7 +99,14 @@ export const HeaderMain = () => {
                   <DialogClose asChild>
                     <Button variant="outline">Cancel</Button>
                   </DialogClose>
-                  <Button type="submit">Deliver Here</Button>
+                  <DialogClose asChild>
+                    <Button
+                      type="submit"
+                      onClick={() => updateAddress(address)}
+                    >
+                      Deliver Here
+                    </Button>
+                  </DialogClose>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
