@@ -30,17 +30,18 @@ import {
 import { useRouter } from "next/navigation";
 import { useAuth } from "../context/AuthProvider";
 import { api } from "@/lib/axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const HeaderMain = () => {
-  const { user, signout, getMe } = useAuth();
+  const { user, signout, updateUser } = useAuth();
   const [address, setAddres] = useState<string>("");
   const updateAddress = async (add: string | undefined) => {
     await api.put("/auth/address", { address: add });
-    getMe();
+    updateUser();
   };
 
   const router = useRouter();
+
   return (
     <div className="w-screen h-17 bg-[#18181B] flex px-22 items-center justify-between fixed top-0 right-0 left-0 z-2">
       <div className="flex gap-3">
@@ -155,7 +156,7 @@ export const HeaderMain = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <div className="flex flex-col gap-2 items-center p-4 rounded-xl">
-                  <p className="text-[20px] font-bold.  ">Test@gmail.com</p>
+                  <p className="text-[20px] font-bold.  ">{user.email}</p>
                   <Button
                     variant="outline"
                     className=" bg-[#F4F4F5] w-20 rounded-full"

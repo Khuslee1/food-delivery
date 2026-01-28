@@ -20,7 +20,7 @@ export type orderType = {
 
 export const CartInfo = () => {
   const { getTotalPrice, cartItems, deleteAll } = useCart();
-  const { user, getMe } = useAuth();
+  const { user } = useAuth();
   const [address, setAddress] = useState<string | undefined>(user?.address);
   const updateAddress = async (add: string | undefined) => {
     await api.put("/auth/address", { address: add });
@@ -32,12 +32,10 @@ export const CartInfo = () => {
         quantity: item.quantity,
         price: item.price,
       })),
+      address: user?.address,
     });
     deleteAll();
   };
-  // useEffect(() => {
-  //   getMe();
-  // }, [address]);
 
   return (
     <div className="flex w-full flex-col gap-6">

@@ -13,7 +13,6 @@ export const getMe: RequestHandler = async (req, res) => {
     const { user } = jwt.verify(token, "67") as {
       user: Omit<typeof UserModel, "password">;
     };
-
     res.status(200).json({ user });
   } catch {
     res.status(401).json({ message: "invalid token " });

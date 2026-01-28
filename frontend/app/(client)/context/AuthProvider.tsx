@@ -16,6 +16,7 @@ type AuthContextType = {
   register: (email: string, password: string) => Promise<void>;
   signout: () => void;
   getMe: () => Promise<void>;
+  updateUser: () => Promise<void>;
 };
 
 type User = {
@@ -45,7 +46,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     localStorage.setItem("accessToken", accessToken);
 
     setUser(data.user);
-
+    if (data.user.role == "admin") return router.push("/admin");
     router.push("/");
   };
 
@@ -56,6 +57,11 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     });
 
     router.push("/Login");
+  };
+
+  const updateUser = async () => {
+    const { data } = await api.get("/auth/user");
+    setUser(data.newUser);
   };
 
   const getMe = async () => {
@@ -85,7 +91,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, signout, getMe }}>
+    <AuthContext.Provider
+      value={{ user, login, register, signout, getMe, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

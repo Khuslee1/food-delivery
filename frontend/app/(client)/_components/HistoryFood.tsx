@@ -15,6 +15,7 @@ type OrderHisType = {
   userId: string;
   orderItems: OrderArrType[];
   status: string;
+  address: string;
   createdAt: string;
 };
 
@@ -66,7 +67,7 @@ export const HistoryFood = () => {
           </p>
 
           <p className="w-full flex gap-1 text-[12px] font-normal text-[#71717A] pb-2 border-b border-dashed">
-            <Map height="16px" width="16px" /> {user?.address}
+            <Map height="16px" width="16px" /> {order.address}
           </p>
         </div>
       ))}

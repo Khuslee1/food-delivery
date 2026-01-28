@@ -11,7 +11,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { CalendarDays, ChevronDown, ChevronsUpDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -34,6 +34,38 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { api } from "@/lib/axios";
+export type foodType = {
+  _id: string;
+  name: string;
+  price: number;
+  ingredients: string;
+  categoryId: string;
+  quantity: number;
+  foodId: { name: string; image: string };
+};
+type userType = {
+  address: string;
+  createdAt: string;
+  email: string;
+  role: string;
+  updatedAt: string;
+  _id: string;
+};
+
+export type orderType = {
+  address: string;
+  createdAt: string;
+  orderItems: foodType[] & { quantity: number; price: number };
+  quantity: number;
+  _id: string;
+  status: string;
+  updatedAt: string;
+  userId: userType;
+};
+type orderWithCheckType = orderType & {
+  checked: boolean;
+};
 
 type infoType = {
   check: boolean;
@@ -44,187 +76,55 @@ type infoType = {
   total: string;
   address: string;
   state: string;
+  // createdAt: string;
+  // orderItems: orderType[];
 };
 
 export const TableComp = () => {
-  const [information, setInfo] = useState<infoType[]>([
-    {
-      check: false,
-      idNumber: 0,
-      customer: "test@gmail.com",
-      food: ["lalar", "jinga"],
-      date: "2024/13/13",
-      total: "123$",
-      address:
-        "2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоонСБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоон20",
-      state: "pending",
-    },
-    {
-      check: false,
-      idNumber: 1,
-      customer: "test@gmail.com",
-      food: ["lalar", "jinga"],
-      date: "2024/13/13",
-      total: "123$",
-      address:
-        "2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоонСБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоон20",
-      state: "pending",
-    },
-    {
-      check: false,
-      idNumber: 2,
-      customer: "test@gmail.com",
-      food: ["lalar", "jinga"],
-      date: "2024/13/13",
-      total: "123$",
-      address:
-        "2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоонСБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоон20",
-      state: "pending",
-    },
-    {
-      check: false,
-      idNumber: 3,
-      customer: "test@gmail.com",
-      food: ["lalar", "jinga"],
-      date: "2024/13/13",
-      total: "123$",
-      address:
-        "2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоонСБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоон20",
-      state: "pending",
-    },
-    {
-      check: false,
-      idNumber: 4,
-      customer: "test@gmail.com",
-      food: ["lalar", "jinga"],
-      date: "2024/13/13",
-      total: "123$",
-      address:
-        "2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоонСБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоон20",
-      state: "pending",
-    },
-    {
-      check: false,
-      idNumber: 5,
-      customer: "test@gmail.com",
-      food: ["lalar", "jinga"],
-      date: "2024/13/13",
-      total: "123$",
-      address:
-        "2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоонСБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоон20",
-      state: "pending",
-    },
-    {
-      check: false,
-      idNumber: 6,
-      customer: "test@gmail.com",
-      food: ["lalar", "jinga"],
-      date: "2024/13/13",
-      total: "123$",
-      address:
-        "2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоонСБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоон20",
-      state: "pending",
-    },
-    {
-      check: false,
-      idNumber: 7,
-      customer: "test@gmail.com",
-      food: ["lalar", "jinga"],
-      date: "2024/13/13",
-      total: "123$",
-      address:
-        "2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоонСБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоон20",
-      state: "pending",
-    },
-    {
-      check: false,
-      idNumber: 8,
-      customer: "test@gmail.com",
-      food: ["lalar", "jinga"],
-      date: "2024/13/13",
-      total: "123$",
-      address:
-        "2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоонСБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоон20",
-      state: "pending",
-    },
-
-    {
-      check: false,
-      idNumber: 9,
-      customer: "test@gmail.com",
-      food: ["lalar", "jinga"],
-      date: "2024/13/13",
-      total: "123$",
-      address:
-        "2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоонСБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоон20",
-      state: "pending",
-    },
-    {
-      check: false,
-      idNumber: 10,
-      customer: "test@gmail.com",
-      food: ["lalar", "jinga"],
-      date: "2024/13/13",
-      total: "123$",
-      address:
-        "2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоонСБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоон20",
-      state: "pending",
-    },
-    {
-      check: false,
-      idNumber: 11,
-      customer: "test@gmail.com",
-      food: ["lalar", "jinga"],
-      date: "2024/13/13",
-      total: "123$",
-      address:
-        "2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоонСБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоон20",
-      state: "pending",
-    },
-    {
-      check: false,
-      idNumber: 12,
-      customer: "test@gmail.com",
-      food: ["lalar", "jinga"],
-      date: "2024/13/13",
-      total: "123$",
-      address:
-        "2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоонСБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоон20",
-      state: "pending",
-    },
-    {
-      check: false,
-      idNumber: 13,
-      customer: "test@gmail.com",
-      food: ["lalar", "jinga"],
-      date: "2024/13/13",
-      total: "123$",
-      address:
-        "2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоонСБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд талд 4д ногоон20",
-      state: "pending",
-    },
-  ]);
+  const [information, setInfo] = useState<orderWithCheckType[]>([]);
   const [stateMe, setState] = useState<string>("pending");
-  const toggleCheck = (index: number, checked: boolean) => {
+  const toggleCheck = (index: string, checked: boolean) => {
     setInfo((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, check: checked } : item))
+      prev.map((item, i) =>
+        item._id === index ? { ...item, checked: checked } : item,
+      ),
     );
     console.log(information);
   };
-  const changeState = (checkedArr: infoType[]) => {
+  const changeState = (checkedArr: orderWithCheckType[]) => {
     checkedArr.map((ele) => {
       setInfo((prev) =>
         prev.map((item, i) =>
-          i === ele.idNumber ? { ...item, state: stateMe, check: false } : item
-        )
+          item._id === ele._id
+            ? { ...item, status: stateMe, checked: false }
+            : item,
+        ),
       );
     });
   };
-  const updateState = (index: number, value: string) => {
+  const updateState = (index: string, value: string) => {
     setInfo((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, state: value } : item))
+      prev.map((item) =>
+        item._id === index ? { ...item, status: value } : item,
+      ),
     );
   };
+
+  const getOrders = async () => {
+    const { data } = await api.get("/order/all");
+    console.log(data);
+
+    const ordersWithCheck = data.map((prev: orderType) => ({
+      ...prev,
+      checked: false,
+    }));
+
+    setInfo(ordersWithCheck);
+  };
+
+  useEffect(() => {
+    getOrders();
+  }, []);
 
   return (
     <div className="w-full rounded-lg">
@@ -245,7 +145,7 @@ export const TableComp = () => {
               <Button className="rounded-full">
                 Change delivery state{" "}
                 <p className="rounded-full bg-white text-black px-2">
-                  {information.filter((el) => el.check).length}
+                  {information.filter((el) => el.checked).length}
                 </p>
               </Button>
             </DialogTrigger>
@@ -312,7 +212,7 @@ export const TableComp = () => {
                     type="button"
                     className="w-full rounded-full"
                     onClick={() => {
-                      changeState(information.filter((ele) => ele.check));
+                      changeState(information.filter((ele) => ele.checked));
                     }}
                   >
                     Save
@@ -349,60 +249,64 @@ export const TableComp = () => {
         <TableBody>
           {information.map((ele, i) => (
             <TableRow
-              key={ele.idNumber}
-              className={`${!ele.check ? "" : "bg-[#E4E4E7]"}`}
+              key={ele._id}
+              className={`${!ele.checked ? "" : "bg-[#E4E4E7]"}`}
             >
               <TableCell className="w-12">
                 <div>
                   {" "}
                   <Checkbox
                     className="border-[#18181B]"
-                    checked={ele.check}
+                    checked={ele.checked}
                     onCheckedChange={(val) =>
-                      toggleCheck(ele.idNumber, val === true)
+                      toggleCheck(ele._id, val === true)
                     }
                   />
                 </div>
               </TableCell>
-              <TableCell className="w-14 text-[#18181B]">
-                {ele.idNumber}
-              </TableCell>
-              <TableCell className="w-50">{ele.customer}</TableCell>
+              <TableCell className="w-14 text-[#18181B]">{i + 1}</TableCell>
+              <TableCell className="w-50">{ele.userId.email}</TableCell>
               <TableCell className="w-50   ">
                 <Popover>
                   <PopoverTrigger className="w-full">
                     <div className="justify-between items-center flex ">
-                      {ele.food.length} foods
+                      {ele.orderItems.length} foods
                       <span>
                         <ChevronDown className="w-4 h-4" />{" "}
                       </span>
                     </div>
                   </PopoverTrigger>
-                  <PopoverContent>
-                    <SmallCart />
+                  <PopoverContent className="flex flex-col gap-0.5">
+                    {ele.orderItems.map((el) => {
+                      return <SmallCart el={el} />;
+                    })}
                   </PopoverContent>
                 </Popover>
               </TableCell>
-              <TableCell className="w-50">{ele.date}</TableCell>
-              <TableCell className="w-50">{ele.total}</TableCell>
+              <TableCell className="w-50">
+                {ele.createdAt.split("T")[0]}
+              </TableCell>
+              <TableCell className="w-50">
+                {ele.orderItems.reduce((acc, item) => acc + item.price, 0)}$
+              </TableCell>
 
               <TableCell className="w-220 whitespace-normal line-clamp-2">
                 {ele.address}
               </TableCell>
               <TableCell className="w-50">
                 <Select
-                  value={ele.state}
-                  onValueChange={(val) => updateState(i, val)}
+                  value={ele.status}
+                  onValueChange={(val) => updateState(ele._id, val)}
                 >
                   <SelectTrigger
                     className={`min-w-23.5 h-8 rounded-full text-black ${
-                      ele.state === "pending"
+                      ele.status === "pending"
                         ? "border border-red-500"
-                        : ele.state === "delivered"
-                        ? "border border-green-500"
-                        : ele.state === "cancelled"
-                        ? "border border-gray-400"
-                        : ""
+                        : ele.status === "delivered"
+                          ? "border border-green-500"
+                          : ele.status === "cancelled"
+                            ? "border border-gray-400"
+                            : ""
                     }`}
                   >
                     <SelectValue />
