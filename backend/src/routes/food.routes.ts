@@ -4,14 +4,14 @@ import { createFood } from "../controllers/food/create-foods";
 import { deleteFood } from "../controllers/food/delete-foods";
 import { getFoodsByCategory } from "../controllers/food/get-foods-by-category";
 import { updateFood } from "../controllers/food/update-foods";
-import { authMiddleware } from "../middlewares";
+import { authMiddleware, RoleMiddleware } from "../middlewares";
 
 const FoodRouter = Router();
 
-FoodRouter.get("/", authMiddleware, getFoods)
-  .post("/create", createFood)
-  .delete("/", deleteFood)
+FoodRouter.get("/", getFoods)
+  .post("/create", RoleMiddleware, createFood)
+  .delete("/", RoleMiddleware, deleteFood)
   .get("/category/:id", getFoodsByCategory)
-  .put("/:id", updateFood);
+  .put("/:id", RoleMiddleware, updateFood);
 
 export { FoodRouter };

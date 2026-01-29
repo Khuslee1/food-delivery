@@ -67,52 +67,10 @@ type orderWithCheckType = orderType & {
   checked: boolean;
 };
 
-type infoType = {
-  check: boolean;
-  idNumber: number;
-  customer: string;
-  food: string[];
-  date: string;
-  total: string;
-  address: string;
-  state: string;
-  // createdAt: string;
-  // orderItems: orderType[];
-};
-
 export const TableComp = () => {
   const [information, setInfo] = useState<orderWithCheckType[]>([]);
-  const [stateMe, setState] = useState<string>("pending");
-  const toggleCheck = (index: string, checked: boolean) => {
-    setInfo((prev) =>
-      prev.map((item, i) =>
-        item._id === index ? { ...item, checked: checked } : item,
-      ),
-    );
-    console.log(information);
-  };
-  const changeState = (checkedArr: orderWithCheckType[]) => {
-    checkedArr.map((ele) => {
-      setInfo((prev) =>
-        prev.map((item, i) =>
-          item._id === ele._id
-            ? { ...item, status: stateMe, checked: false }
-            : item,
-        ),
-      );
-    });
-  };
-  const updateState = (index: string, value: string) => {
-    setInfo((prev) =>
-      prev.map((item) =>
-        item._id === index ? { ...item, status: value } : item,
-      ),
-    );
-  };
-
   const getOrders = async () => {
     const { data } = await api.get("/order/all");
-    console.log(data);
 
     const ordersWithCheck = data.map((prev: orderType) => ({
       ...prev,
@@ -125,6 +83,42 @@ export const TableComp = () => {
   useEffect(() => {
     getOrders();
   }, []);
+  const [stateMe, setState] = useState<string>("pending");
+  const toggleCheck = (index: string, checked: boolean) => {
+    setInfo((prev) =>
+      prev.map((item, i) =>
+        item._id === index ? { ...item, checked: checked } : item,
+      ),
+    );
+    console.log(information);
+  };
+  const changeState = async (checkedArr: orderWithCheckType[]) => {
+    checkedArr.map((ele) => {
+      setInfo((prev) =>
+        prev.map((item, i) =>
+          item._id === ele._id
+            ? { ...item, status: stateMe, checked: false }
+            : item,
+        ),
+      );
+    });
+    const orderIds = checkedArr.map((order) => order._id);
+    await api.patch("/order/status", {
+      orderIds: orderIds,
+      status: stateMe,
+    });
+  };
+  const updateState = async (index: string, value: string) => {
+    setInfo((prev) =>
+      prev.map((item) =>
+        item._id === index ? { ...item, status: value } : item,
+      ),
+    );
+    await api.patch("/order/status", {
+      orderIds: [index],
+      status: value,
+    });
+  };
 
   return (
     <div className="w-full rounded-lg">
@@ -287,7 +281,11 @@ export const TableComp = () => {
                 {ele.createdAt.split("T")[0]}
               </TableCell>
               <TableCell className="w-50">
-                {ele.orderItems.reduce((acc, item) => acc + item.price, 0)}$
+                {ele.orderItems.reduce(
+                  (acc, item) => acc + item.price * item.quantity,
+                  0,
+                )}
+                $
               </TableCell>
 
               <TableCell className="w-220 whitespace-normal line-clamp-2">
