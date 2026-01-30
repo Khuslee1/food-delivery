@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Pagination,
   PaginationContent,
@@ -8,186 +9,94 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { orderWithCheckType } from "./TableComp";
 
-export const Pagi = () => {
-  const [now, setNow] = useState<number>(1);
-  const arr = [2, 3, 4, 5];
-  const max = 10;
+type Props = {
+  information: orderWithCheckType[];
+  setPageNumber: Dispatch<SetStateAction<number>>;
+};
 
-  const isPrevDisabled = now === 1;
-  const isNextDisabled = now === max;
-  const next = () => {
-    setNow(now + 1);
+export const Pagi = ({ information, setPageNumber }: Props) => {
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
+  const totalPages = Math.ceil(information.length / pageSize);
+  const getPageNumbers = (
+    current: number,
+    total: number,
+    delta = 1,
+  ): (number | "ellipsis")[] => {
+    const range: (number | "ellipsis")[] = [];
+
+    const left = Math.max(2, current - delta);
+    const right = Math.min(total - 1, current + delta);
+
+    range.push(1);
+
+    if (left > 2) {
+      range.push("ellipsis");
+    }
+
+    for (let i = left; i <= right; i++) {
+      range.push(i);
+    }
+
+    if (right < total - 1) {
+      range.push("ellipsis");
+    }
+
+    if (total > 1) {
+      range.push(total);
+    }
+
+    return range;
   };
-  const previ = () => {
-    if (now == 1) return;
-    return setNow(now - 1);
-  };
-  const nowFunc = (ele: number) => {
-    setNow(ele);
-  };
-  const pathName = usePathname();
+
+  const pages = getPageNumbers(page, totalPages);
+
   return (
-    <Pagination className="justify-end w-full mr-10 ">
+    <Pagination className="justify-end w-full mr-10">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            href={`#${now}`}
-            onClick={isPrevDisabled ? undefined : previ}
-            className={`rounded-full bg-white ${
-              isPrevDisabled ? "pointer-events-none opacity-50" : ""
-            }`}
+            onClick={() => {
+              setPage((p) => Math.max(1, p - 1));
+              setPageNumber((p) => Math.max(1, p - 1));
+            }}
+            className={page === 1 ? "pointer-events-none opacity-50" : ""}
           />
         </PaginationItem>
-        <PaginationItem>
-          <PaginationLink
-            href="#1"
-            isActive={now == 1}
-            onClick={() => nowFunc(1)}
-            className="
-    rounded-full
-    bg-white
-    aria-[current=page]:bg-black
-    aria-[current=page]:text-white
-    aria-[current=page]:border-black
-  "
-          >
-            1
-          </PaginationLink>
-        </PaginationItem>
-        {now >= 8 && (
-          <PaginationItem>
-            <PaginationEllipsis className={"rounded-full bg-white"} />
+        {pages.map((p, i) => (
+          <PaginationItem key={i}>
+            {p === "ellipsis" ? (
+              <PaginationEllipsis />
+            ) : (
+              <PaginationLink
+                isActive={page === p}
+                onClick={() => {
+                  setPage(p);
+                  setPageNumber(p);
+                }}
+                className="
+                  rounded-full bg-white
+                  aria-[current=page]:bg-black
+                  aria-[current=page]:text-white
+                "
+              >
+                {p}
+              </PaginationLink>
+            )}
           </PaginationItem>
-        )}
-        {now <= 4 ? (
-          arr.map((ele) => {
-            return (
-              <PaginationItem key={ele}>
-                <PaginationLink
-                  href={`#${ele}`}
-                  isActive={now == ele}
-                  onClick={() => nowFunc(ele)}
-                  className="
-    rounded-full
-    bg-white
-    aria-[current=page]:bg-black
-    aria-[current=page]:text-white
-    aria-[current=page]:border-black
-  "
-                >
-                  {ele}
-                </PaginationLink>
-              </PaginationItem>
-            );
-          })
-        ) : now <= 7 ? (
-          <>
-            <PaginationItem>
-              <PaginationEllipsis className={"rounded-full bg-white"} />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink
-                href="#10"
-                onClick={() => nowFunc(now - 1)}
-                className="
-    rounded-full
-    bg-white
-    aria-[current=page]:bg-black
-    aria-[current=page]:text-white
-    aria-[current=page]:border-black
-  "
-              >
-                {now - 1}
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink
-                href="#10"
-                isActive
-                onClick={() => nowFunc(now)}
-                className="
-    rounded-full
-    bg-white
-    aria-[current=page]:bg-black
-    aria-[current=page]:text-white
-    aria-[current=page]:border-black
-  "
-              >
-                {now}
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink
-                href="#10"
-                onClick={() => nowFunc(now + 1)}
-                className="
-    rounded-full
-    bg-white
-    aria-[current=page]:bg-black
-    aria-[current=page]:text-white
-    aria-[current=page]:border-black
-  "
-              >
-                {now + 1}
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis className={"rounded-full bg-white"} />
-            </PaginationItem>
-          </>
-        ) : (
-          arr.map((ele) => {
-            return (
-              <PaginationItem key={ele + 4}>
-                <PaginationLink
-                  href={`#${ele + 4}`}
-                  isActive={now == ele + 4}
-                  onClick={() => nowFunc(ele + 4)}
-                  className="
-    rounded-full
-    bg-white
-    aria-[current=page]:bg-black
-    aria-[current=page]:text-white
-    aria-[current=page]:border-black
-  "
-                >
-                  {ele + 4}
-                </PaginationLink>
-              </PaginationItem>
-            );
-          })
-        )}
-        {now >= 1 && now <= 4 && (
-          <PaginationItem>
-            <PaginationEllipsis className={"rounded-full bg-white"} />
-          </PaginationItem>
-        )}
-        <PaginationItem>
-          <PaginationLink
-            href="#10"
-            isActive={now == 10}
-            onClick={() => nowFunc(10)}
-            className="
-    rounded-full
-    bg-white
-    aria-[current=page]:bg-black
-    aria-[current=page]:text-white
-    aria-[current=page]:border-black
-  "
-          >
-            10
-          </PaginationLink>
-        </PaginationItem>
+        ))}
         <PaginationItem>
           <PaginationNext
-            href={`#${now}`}
-            onClick={isNextDisabled ? undefined : next}
-            className={`rounded-full bg-white ${
-              isNextDisabled ? "pointer-events-none opacity-50" : ""
-            }`}
+            onClick={() => {
+              setPage((p) => Math.min(totalPages, p + 1));
+              setPageNumber((p) => Math.min(totalPages, p + 1));
+            }}
+            className={
+              page === totalPages ? "pointer-events-none opacity-50" : ""
+            }
           />
         </PaginationItem>
       </PaginationContent>

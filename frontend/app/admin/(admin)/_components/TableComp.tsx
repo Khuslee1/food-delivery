@@ -1,4 +1,6 @@
 "use client";
+import * as React from "react";
+import { type DateRange } from "react-day-picker";
 import {
   Table,
   TableBody,
@@ -10,8 +12,9 @@ import {
 } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CalendarDays, ChevronDown, ChevronsUpDown, X } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -35,6 +38,13 @@ import {
 } from "@/components/ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { api } from "@/lib/axios";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
+import { addDays } from "date-fns";
 export type foodType = {
   _id: string;
   name: string;
@@ -63,26 +73,22 @@ export type orderType = {
   updatedAt: string;
   userId: userType;
 };
-type orderWithCheckType = orderType & {
+export type orderWithCheckType = orderType & {
   checked: boolean;
 };
 
-export const TableComp = () => {
-  const [information, setInfo] = useState<orderWithCheckType[]>([]);
-  const getOrders = async () => {
-    const { data } = await api.get("/order/all");
+type propsType = {
+  information: orderWithCheckType[];
+  setInfo: Dispatch<SetStateAction<orderWithCheckType[]>>;
+  setFilter: Dispatch<
+    SetStateAction<{
+      gt: string | undefined;
+      lt: string | undefined;
+    }>
+  >;
+};
 
-    const ordersWithCheck = data.map((prev: orderType) => ({
-      ...prev,
-      checked: false,
-    }));
-
-    setInfo(ordersWithCheck);
-  };
-
-  useEffect(() => {
-    getOrders();
-  }, []);
+export const TableComp = ({ information, setInfo, setFilter }: propsType) => {
   const [stateMe, setState] = useState<string>("pending");
   const toggleCheck = (index: string, checked: boolean) => {
     setInfo((prev) =>
@@ -119,6 +125,11 @@ export const TableComp = () => {
       status: value,
     });
   };
+  const [open, setOpen] = useState(false);
+  const [dateRange, setDateRange] = React.useState<DateRange | undefined>({
+    from: new Date(new Date().getFullYear(), 0, 12),
+    to: addDays(new Date(new Date().getFullYear(), 0, 12), 30),
+  });
 
   return (
     <div className="w-full rounded-lg">
@@ -130,10 +141,41 @@ export const TableComp = () => {
           </span>
         </h1>
         <div className="flex gap-3">
-          <Button className="rounded-full" variant={"outline"}>
-            <CalendarDays />
-            13 June 2023 - 14 July 2023
-          </Button>
+          <DropdownMenu open={open} onOpenChange={setOpen}>
+            <DropdownMenuTrigger asChild>
+              <Button className="rounded-full" variant={"outline"}>
+                <CalendarDays />
+                {String(dateRange?.from).split("00")[0]} -
+                {String(dateRange?.to).split("00")[0]}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="z-2 bg-gray-300 rounded-xl border border-gray-300 ">
+              <Calendar
+                mode="range"
+                defaultMonth={dateRange?.from}
+                selected={dateRange}
+                onSelect={setDateRange}
+                numberOfMonths={2}
+                disabled={(date: any) =>
+                  date > new Date() || date < new Date("1900-01-01")
+                }
+                className="rounded-xl"
+              />
+              <DropdownMenuItem onClick={() => setOpen(false)}>
+                <Button
+                  className="m-3"
+                  onClick={() => {
+                    setFilter({
+                      gt: dateRange?.from?.toISOString(),
+                      lt: dateRange?.to?.toISOString(),
+                    });
+                  }}
+                >
+                  Filter
+                </Button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Dialog>
             <DialogTrigger asChild>
               <Button className="rounded-full">
