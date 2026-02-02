@@ -35,6 +35,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/lib/axios";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   dishName: z.string(),
@@ -100,6 +101,7 @@ export const Cart = ({ ell, mapData, ele }: propsType) => {
       image: values.image,
       categoryId: values.dishCata,
     });
+    toast("Food is being updated to the backend!", { position: "top-center" });
   }
   return (
     <div className="relative ">

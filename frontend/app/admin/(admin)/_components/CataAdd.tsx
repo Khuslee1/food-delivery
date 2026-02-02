@@ -32,6 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { api } from "@/lib/axios";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   foodName: z.string(),
@@ -93,7 +94,7 @@ export const CataAdd = ({ mapData, setAllstate, allState }: dataTypeMap) => {
         {
           method: "POST",
           body: file,
-        }
+        },
       );
 
       if (!response.ok) {
@@ -124,6 +125,9 @@ export const CataAdd = ({ mapData, setAllstate, allState }: dataTypeMap) => {
     });
     form.reset();
     setPreview("");
+    toast("New Food is being added to the menu!", {
+      position: "top-center",
+    });
   }
 
   return (

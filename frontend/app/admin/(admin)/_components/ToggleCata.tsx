@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/form";
 import { foodArr } from "./CataAdd";
 import { api } from "@/lib/axios";
+import { toast } from "sonner";
 const formSchema = z.object({
   name: z.string(),
 });
@@ -53,6 +54,9 @@ export const ToggleCata = ({
       name: values.name,
     });
     form.reset();
+    toast("New Category is being added to the menu!", {
+      position: "top-center",
+    });
   }
   return (
     <div className="flex flex-col gap-4 w-full  rounded-xl p-6 bg-white">
@@ -100,11 +104,14 @@ export const ToggleCata = ({
                   size={"icon"}
                   className="rounded-full border-red-500 w-8 h-8"
                   variant={"outline"}
-                  onClick={async () =>
+                  onClick={async () => {
                     await api.delete("/categories/delete", {
                       data: { name: ele.name },
-                    })
-                  }
+                    });
+                    toast("New Category is being deleted!", {
+                      position: "top-center",
+                    });
+                  }}
                 >
                   <Trash2 className="text-red-500" />
                 </Button>

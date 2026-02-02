@@ -14,6 +14,7 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import { useCart } from "../context/cart-context";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { foodType } from "./CartInfo";
+import { toast } from "sonner";
 export type Props = {
   id: string;
   setOrder: Dispatch<SetStateAction<foodType[]>>;
@@ -26,8 +27,8 @@ export const FoodCart = (props: Props) => {
   useEffect(() => {
     props.setOrder((prev) =>
       prev.map((item) =>
-        item._id === props.id ? { ...item, quantity: item.quantity } : item
-      )
+        item._id === props.id ? { ...item, quantity: item.quantity } : item,
+      ),
     );
   }, [cartItems]);
   const [quantity, setQuantity] = useState<number>(1);
@@ -144,10 +145,13 @@ export const FoodCart = (props: Props) => {
                     className="rounded-full"
                     onClick={() => {
                       addToCart(
-                        props.orderInfo.filter((ele) => ele._id == props.id)[0]
+                        props.orderInfo.filter((ele) => ele._id == props.id)[0],
                       );
                       updateQuantity(props.id, quantity);
                       setQuantity(1);
+                      toast("Food is being added to the cart!", {
+                        position: "top-center",
+                      });
                     }}
                   >
                     {" "}
@@ -165,9 +169,19 @@ export const FoodCart = (props: Props) => {
           isCarted ? "bg-white" : "bg-[#18181B]"
         }`}
         onClick={() => {
-          isCarted
-            ? addToCart(props.orderInfo.filter((ele) => ele._id == props.id)[0])
-            : removeCart(props.id);
+          if (isCarted) {
+            const food = props.orderInfo.find((ele) => ele._id === props.id);
+            if (!food) return;
+            addToCart(food);
+            toast("Food is being added to the cart!", {
+              position: "top-center",
+            });
+          } else {
+            removeCart(props.id);
+            toast("Food is being removed from the cart!", {
+              position: "top-center",
+            });
+          }
         }}
       >
         {isCarted ? (

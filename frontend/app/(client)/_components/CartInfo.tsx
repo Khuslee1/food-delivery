@@ -9,7 +9,17 @@ import { HistoryCard } from "./HistoryCard";
 import { Food, useCart } from "../context/cart-context";
 import { api } from "@/lib/axios";
 import { useAuth } from "../context/AuthProvider";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export type foodType = Food & {
   quantity: number;
@@ -127,15 +137,45 @@ export const CartInfo = () => {
                       : "-"}
                   </span>
                 </p>
-                <Button
-                  className="w-full h-11 bg-red-500 text-white rounded-full mt-4"
-                  onClick={() => {
-                    updateAddress(address);
-                    postOrder();
-                  }}
-                >
-                  Checkout
-                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      className="w-full h-11 bg-red-500 text-white rounded-full mt-4"
+                      disabled={cartItems.length === 0}
+                      onClick={() => {
+                        if (cartItems.length > 0) {
+                          updateAddress(address);
+                          postOrder();
+                        }
+                      }}
+                    >
+                      Checkout
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent className="flex flex-col items-center justify-center">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle className="font-semibold text-[24px]">
+                        Your order has been successfully placed!
+                      </AlertDialogTitle>
+                      <AlertDialogDescription className="flex items-center justify-center w-full">
+                        <img
+                          src="/illustration.png"
+                          className="w-39 h-[265.7px]"
+                          alt="Order success"
+                        />
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+
+                    <AlertDialogFooter>
+                      <AlertDialogAction
+                        variant="outline"
+                        className="rounded-3xl"
+                      >
+                        Back to Home
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </CardContent>
           </Card>

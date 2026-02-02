@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/sonner";
 import { HeaderAdmin } from "./_components/HeaderAdmin";
 
 export default function RootLayout({
@@ -8,6 +9,7 @@ export default function RootLayout({
   return (
     <div className="flex">
       <HeaderAdmin />
+      <Toaster />
       {children}
     </div>
   );
