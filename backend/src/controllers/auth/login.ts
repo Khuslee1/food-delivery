@@ -18,5 +18,6 @@ export const login: RequestHandler = async (req, res) => {
   return res.status(200).json({
     user: rest,
     accessToken,
+    message: "Access proved",
   });
 };

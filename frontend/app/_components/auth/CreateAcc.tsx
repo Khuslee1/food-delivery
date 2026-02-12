@@ -32,7 +32,6 @@ export const CreateAcc = () => {
       Email: "",
     },
   });
-
   function onSubmit(values: z.infer<typeof formSchema>) {
     setStep(2);
     setData((prev) => ({
@@ -46,7 +45,6 @@ export const CreateAcc = () => {
         className="w-9 h-9 flex items-center justify-center"
         type="button"
         variant="outline"
-        // onClick={() => setStep(1)}
         disabled
       >
         <ChevronLeft />
@@ -74,10 +72,6 @@ export const CreateAcc = () => {
           <Button type="submit" className="w-full">
             Let's Go
           </Button>
-          {/* <p className="text-[#71717A] w-full flex gap-3 justify-center">
-            Already have an account?
-            <span className="text-[#2563EB]">Log in</span>
-          </p> */}
           <Jumper value={"sign"} />
         </form>
       </Form>

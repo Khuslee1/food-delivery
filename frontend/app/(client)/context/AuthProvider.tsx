@@ -1,6 +1,7 @@
 "use client";
 
 import { api } from "@/lib/axios";
+import { error } from "console";
 import { useRouter } from "next/navigation";
 import {
   PropsWithChildren,
@@ -9,6 +10,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { toast } from "sonner";
 
 type AuthContextType = {
   user: User | null;
@@ -17,6 +19,7 @@ type AuthContextType = {
   signout: () => void;
   getMe: () => Promise<void>;
   updateUser: () => Promise<void>;
+  messageL: string | null;
 };
 
 type User = {
@@ -28,35 +31,67 @@ type User = {
 type LoginRes = {
   user: User;
   accessToken: string;
+  message: string;
 };
 
 export const AuthContext = createContext({} as AuthContextType);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>(null);
+  const [messageL, setMessage] = useState<string | null>(null);
   const router = useRouter();
-  const login = async (email: string, password: string) => {
-    const { data } = await api.post<LoginRes>("/auth/login", {
-      email,
-      password,
-    });
+  const login = async (email: string, password: string): Promise<void> => {
+    try {
+      const { data } = await api.post<LoginRes>("/auth/login", {
+        email,
+        password,
+      });
 
-    const { user, accessToken } = data;
+      const { user, accessToken } = data;
 
-    localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("accessToken", accessToken);
+      setUser(user);
 
-    setUser(data.user);
-    if (data.user.role == "admin") return router.push("/admin");
-    router.push("/");
+      if (user.role === "admin") {
+        router.push("/admin");
+        toast.success("Login successful", {
+          position: "top-center",
+        });
+      } else {
+        router.push("/");
+        toast.success("Login successful", {
+          position: "top-center",
+        });
+      }
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Login failed. Please check your credentials.";
+      toast.error("Login failed", {
+        position: "top-center",
+      });
+      setMessage(errorMessage);
+
+      throw error;
+    }
   };
 
   const register = async (email: string, password: string) => {
-    await api.post("/auth/register", {
-      email,
-      password,
-    });
-
-    router.push("/Login");
+    try {
+      await api.post("/auth/register", {
+        email,
+        password,
+      });
+      router.push("/Login");
+      toast.success("Successfully registered", {
+        position: "top-center",
+      });
+    } catch (error) {
+      toast.error("Email exists", {
+        position: "top-center",
+      });
+      throw error;
+    }
   };
 
   const updateUser = async () => {
@@ -92,7 +127,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, login, register, signout, getMe, updateUser }}
+      value={{ user, login, register, signout, getMe, updateUser, messageL }}
     >
       {children}
     </AuthContext.Provider>

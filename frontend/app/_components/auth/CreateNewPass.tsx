@@ -22,6 +22,7 @@ import { StepContext } from "@/app/Signup/page";
 import { Jumper } from "./Jumper";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/(client)/context/AuthProvider";
+import { toast } from "sonner";
 
 const formSchema = z
   .object({
