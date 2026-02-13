@@ -42,7 +42,7 @@ export const CartInfo = () => {
         quantity: item.quantity,
         price: item.price,
       })),
-      address: user?.address,
+      address: address,
     });
     deleteAll();
   };
@@ -95,7 +95,7 @@ export const CartInfo = () => {
                       Delivary location
                     </h1>
                     <Textarea
-                      defaultValue={user?.address}
+                      defaultValue={address}
                       placeholder="Please share your complete address"
                       className="mt-2 h-20"
                       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -142,10 +142,10 @@ export const CartInfo = () => {
                     <Button
                       className="w-full h-11 bg-red-500 text-white rounded-full mt-4"
                       disabled={cartItems.length === 0}
-                      onClick={() => {
+                      onClick={async () => {
                         if (cartItems.length > 0) {
-                          updateAddress(address);
-                          postOrder();
+                          await updateAddress(address);
+                          await postOrder();
                         }
                       }}
                     >

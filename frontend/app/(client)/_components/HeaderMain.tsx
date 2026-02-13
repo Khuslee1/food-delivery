@@ -30,7 +30,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useAuth } from "../context/AuthProvider";
 import { api } from "@/lib/axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const HeaderMain = () => {
   const { user, signout, updateUser } = useAuth();
@@ -72,7 +72,7 @@ export const HeaderMain = () => {
                 showCloseButton={false}
               >
                 <DialogHeader>
-                  <DialogClose>
+                  <DialogClose asChild>
                     <Button
                       size="icon"
                       variant="outline"
