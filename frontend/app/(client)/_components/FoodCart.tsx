@@ -38,7 +38,7 @@ export const FoodCart = (props: Props) => {
       <Dialog>
         <DialogTrigger>
           <div>
-            <Card className="p-4 w-99.25 h-85.5 gap-1.25">
+            <Card className="p-4 w-full h-85.5 gap-1.25">
               <CardHeader className="p-0">
                 <img
                   className="w-full h-52.5 rounded-xl"
@@ -69,9 +69,9 @@ export const FoodCart = (props: Props) => {
             </Card>
           </div>
         </DialogTrigger>
-        <DialogContent className="min-w-206.5" showCloseButton={false}>
+        <DialogContent className="w-[90vw] max-w-[826px]" showCloseButton={false}>
           <DialogTitle className="hidden" />
-          <DialogHeader className="flex-row gap-6 min-w-200 ">
+          <DialogHeader className="flex-row gap-6 w-full">
             <img
               className="w-[46.7%] h-91"
               src={

@@ -51,10 +51,10 @@ export const Type = () => {
             key={ele}
             className="flex flex-col gap-10 items-center bg-[#404040] pt-12 pb-10"
           >
-            <h1 className="w-316 text-[30px] text-white font-semibold">
+            <h1 className="max-w-[1264px] w-full px-6 text-[30px] text-white font-semibold">
               {ele}
             </h1>
-            <div className="flex flex-wrap w-316 gap-9">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-9 max-w-[1264px] w-full px-6">
               {orderInfo.map((foodele, index) => {
                 if (
                   (ele === "Uncategorized" && !foodele.categoryId) ||

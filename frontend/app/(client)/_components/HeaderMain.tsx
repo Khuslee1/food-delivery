@@ -43,7 +43,7 @@ export const HeaderMain = () => {
   const router = useRouter();
 
   return (
-    <div className="w-screen h-17 bg-[#18181B] flex px-22 items-center justify-between fixed top-0 right-0 left-0 z-2">
+    <div className="w-screen h-17 bg-[#18181B] flex px-6 lg:px-12 xl:px-22 items-center justify-between fixed top-0 right-0 left-0 z-2">
       <div className="flex gap-3">
         <img src="../logo.png" height={"37px"} width={"46px"} />{" "}
         <div>

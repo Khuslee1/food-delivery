@@ -35,10 +35,10 @@ export default function Home() {
   const { register } = useAuth();
 
   return (
-    <div className="w-screen h-screen flex gap-10 p-10 pl-20 items-center justify-between">
+    <div className="w-screen min-h-screen flex flex-col lg:flex-row gap-10 p-6 lg:p-10 lg:pl-20 items-center justify-center lg:justify-between">
       <StepContext.Provider value={{ setStep, setData, data }}>
         {step == 1 ? <CreateAcc /> : <CreateNewPass />}
-        <img src="./LoginImg.png" className="h-full" />
+        <img src="./LoginImg.png" className="hidden lg:block h-full max-h-screen object-contain" />
       </StepContext.Provider>
     </div>
   );

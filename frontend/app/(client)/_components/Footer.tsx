@@ -25,7 +25,7 @@ export const Footer = () => {
   ];
 
   return (
-    <div className="w-full h-188.75 bg-[#18181B] flex flex-col items-center justify-around overflow-hidden ">
+    <div className="w-full bg-[#18181B] flex flex-col items-center justify-around overflow-hidden">
       <div className="w-full h-23 bg-[#EF4444]  overflow-hidden flex items-center">
         <div className="animate-[marquee_15s_linear_infinite] flex items-center gap-8.5">
           <h1 className="font-semibold text-[30px] text-white">
@@ -45,8 +45,8 @@ export const Footer = () => {
           </h1>
         </div>
       </div>
-      <div className="w-316 h-104 flex flex-col justify-between">
-        <div className="w-full h-57 flex gap-55">
+      <div className="max-w-[1264px] w-full px-6 py-12 flex flex-col gap-10">
+        <div className="w-full flex flex-col lg:flex-row gap-10 lg:gap-20">
           <div className="flex gap-3 flex-col items-center min-w-fit">
             <img src="../logo.png" height={"37px"} width={"46px"} />{" "}
             <div>
@@ -56,7 +56,7 @@ export const Footer = () => {
               <p className="text-[12px] text-white">Swift delivery</p>
             </div>
           </div>{" "}
-          <div className="flex gap-28 min-w-fit">
+          <div className="flex flex-wrap gap-10 lg:gap-16">
             <div className="flex flex-col gap-1">
               {" "}
               <h1 className="font-normal text-4 text-[#71717A]">NOMNOM</h1>
@@ -97,7 +97,7 @@ export const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="w-full h-21 border-t border-t-[#F4F4F566] items-center gap-12 flex">
+        <div className="w-full py-5 border-t border-t-[#F4F4F566] items-center gap-6 flex flex-wrap">
           {bottom.map((ele, il) => {
             return (
               <p key={il} className="tex-[14px] text-[#71717A]">
