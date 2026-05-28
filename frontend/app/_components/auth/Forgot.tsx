@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Header } from "./Header";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { StepContext } from "@/app/Login/page";
 import { Jumper } from "./Jumper";
 
@@ -24,19 +24,40 @@ const formSchema = z.object({
     .string()
     .email({ message: "Invalid email. Use a format like example@email.com." }),
 });
+
 export const Forgot = () => {
-  const { setStep } = useContext(StepContext);
+  const { setStep, setEmail } = useContext(StepContext);
+  const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      Email: "",
-    },
+    defaultValues: { Email: "" },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    setStep(3);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setError("");
+    setLoading(true);
+    try {
+      const res = await fetch("${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: values.Email }),
+      });
+      const data = await res.json() as { message: string };
+      if (!res.ok) {
+        setError(data.message);
+        return;
+      }
+      setEmail(values.Email);
+      setStep(3);
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
+
   return (
     <div className="w-104 flex flex-col gap-6">
       <Button
@@ -49,7 +70,7 @@ export const Forgot = () => {
       </Button>
       <Header
         h1T={"Reset your password "}
-        pT={"Enter your email to receive a password reset link."}
+        pT={"Enter your email to receive a password reset OTP."}
       />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -66,14 +87,11 @@ export const Forgot = () => {
                 </FormItem>
               )}
             />
+            {error && <p className="text-sm text-red-500">{error}</p>}
           </div>
-          <Button type="submit" className="w-full">
-            Send link
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Sending..." : "Send OTP"}
           </Button>
-          {/* <p className="text-[#71717A] w-full flex gap-3 justify-center">
-            Don’t have an account?{" "}
-            <span className="text-[#2563EB]">Sign up</span>
-          </p> */}
           <Jumper value={"log"} />
         </form>
       </Form>

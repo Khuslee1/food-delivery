@@ -17,8 +17,8 @@
     // "types": ["node"],
     // and npm install -D @types/node
 
-       "module": "esnext", // Or "nodenext", "es2022", "system"
-    "moduleResolution": "node",
+       "module": "esnext",
+    "moduleResolution": "bundler",
 
     // Other Outputs
     "sourceMap": true,

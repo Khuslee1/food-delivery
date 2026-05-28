@@ -19,6 +19,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useContext, useState } from "react";
 import { StepContext } from "@/app/Login/page";
+import { useRouter } from "next/navigation";
 
 const formSchema = z
   .object({
@@ -35,20 +36,41 @@ const formSchema = z
     message: "Passwords do not match",
     path: ["ConfirmPassword"],
   });
+
 export const CreateNew = () => {
-  const { setStep } = useContext(StepContext);
+  const { setStep, email } = useContext(StepContext);
   const [see, setSee] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      Password: "",
-      ConfirmPassword: "",
-    },
+    defaultValues: { Password: "", ConfirmPassword: "" },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setError("");
+    setLoading(true);
+    try {
+      const res = await fetch("${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password: values.Password }),
+      });
+      const data = await res.json() as { message: string };
+      if (!res.ok) {
+        setError(data.message);
+        return;
+      }
+      router.push("/Login");
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
+
   return (
     <div className="w-104 flex flex-col gap-6">
       <Button
@@ -113,9 +135,10 @@ export const CreateNew = () => {
                 Show Password
               </Label>
             </div>
+            {error && <p className="text-sm text-red-500">{error}</p>}
           </div>
-          <Button type="submit" className="w-full">
-            Create Password
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Saving..." : "Create Password"}
           </Button>
         </form>
       </Form>

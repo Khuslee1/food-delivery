@@ -1,10 +1,14 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://localhost:4000",
-  headers: {
-    "Content-Type": "application/json",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000",
+  headers: { "Content-Type": "application/json" },
+});
 
-    Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-  },
+api.interceptors.request.use((config) => {
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("accessToken");
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });

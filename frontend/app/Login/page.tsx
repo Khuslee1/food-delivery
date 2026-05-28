@@ -8,6 +8,8 @@ import { Verify } from "../_components/auth/Verify";
 
 export type StepContextType = {
   setStep: Dispatch<SetStateAction<number>>;
+  email: string;
+  setEmail: Dispatch<SetStateAction<string>>;
 };
 
 export const StepContext = createContext<StepContextType>(
@@ -16,10 +18,10 @@ export const StepContext = createContext<StepContextType>(
 
 export default function Home() {
   const [step, setStep] = useState<number>(1);
-
+  const [email, setEmail] = useState<string>("");
   return (
     <div className="w-screen h-screen flex gap-10 p-10 pl-20 items-center justify-between">
-      <StepContext.Provider value={{ setStep }}>
+      <StepContext.Provider value={{ setStep, email, setEmail }}>
         {step == 1 ? (
           <Login />
         ) : step == 2 ? (

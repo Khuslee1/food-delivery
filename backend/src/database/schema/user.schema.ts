@@ -7,8 +7,10 @@ const userSchema = new Schema(
     profile: { type: String, required: false },
     address: { type: String, required: false },
     role: { type: String, required: true, default: "customer" },
+    resetOTP: { type: String, required: false },
+    resetOTPExpiry: { type: Date, required: false },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 export const UserModel = model("User", userSchema);

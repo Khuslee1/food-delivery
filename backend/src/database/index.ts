@@ -1,7 +1,8 @@
-import {connect} from "mongoose"
+import { connect } from "mongoose";
 
 export const connectToDatabase = async () => {
-    await connect('mongodb+srv://admin:qrk8YwdPlXvufjjP@cluster0.f3ckqou.mongodb.net/?appName=Cluster0')
-    console.log("database connected");
-    
-}
+  const uri = process.env.MONGODB_URI;
+  if (!uri) throw new Error("MONGODB_URI is not set in environment variables");
+  await connect(uri);
+  console.log("database connected");
+};

@@ -1,15 +1,17 @@
+import 'dotenv/config'
 import express from "express";
 import { connectToDatabase } from "./database";
 import { FoodRouter } from "./routes/food.routes";
 import { CategoryRouter } from "./routes/category.routes";
+import { AuthRouter } from "./routes/auth.routes";
+import { OrderRouter } from "./routes/order.routes";
 import cors from "cors";
-import { AuthRouter, OrderRouter } from "./routes";
 
 await connectToDatabase();
 
 const app = express();
 
-const port = 4000;
+const port = process.env.PORT ? Number(process.env.PORT) : 4000;
 app.use(express.json());
 app.use(cors());
 
