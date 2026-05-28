@@ -71,7 +71,7 @@ export const CartInfo = () => {
                 My cart
               </CardTitle>
             </CardHeader>
-            <CardContent className="grid gap-6 min-h-102.5">
+            <CardContent className="grid gap-6">
               {cartItems.length == 0 ? (
                 <div className="w-full h-fit bg-[#F4F4F5] rounded-xl flex flex-col px-12 py-8 justify-center items-center gap-1">
                   <img src="../logo.png" height={"50px"} width={"61px"} />
