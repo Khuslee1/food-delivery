@@ -1,7 +1,6 @@
 "use client";
 
 import { api } from "@/lib/axios";
-import { error } from "console";
 import { useRouter } from "next/navigation";
 import {
   PropsWithChildren,
