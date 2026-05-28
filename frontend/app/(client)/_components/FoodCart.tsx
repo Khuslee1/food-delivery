@@ -34,10 +34,10 @@ export const FoodCart = (props: Props) => {
   const [quantity, setQuantity] = useState<number>(1);
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <Dialog>
-        <DialogTrigger>
-          <div>
+        <DialogTrigger className="w-full block">
+          <div className="w-full">
             <Card className="p-4 w-full h-85.5 gap-1.25">
               <CardHeader className="p-0">
                 <img
